@@ -1,8 +1,8 @@
 import express = require("express");
-import { graphqlHTTP } from 'express-graphql';
+import { graphqlHTTP } from "express-graphql";
 
-import { AppDataSource } from './data-source';
-import schema, { root } from './schema';
+import { AppDataSource } from "./data-source";
+import { schema } from "./schema";
 
 const app = express();
 
@@ -11,23 +11,24 @@ const app = express();
  * port. If the server fails to initialize, it logs an error message.
  */
 async function main() {
-    try {
-        await AppDataSource.initialize();
+  try {
+    await AppDataSource.initialize();
 
-        app.use("/graphql", graphqlHTTP({
-            schema: schema,
-            rootValue: root,
-            graphiql: true,
-        }));
+    app.use(
+      "/graphql",
+      graphqlHTTP({
+        schema: schema,
+        graphiql: true,
+      })
+    );
 
-        const port = process.env.PORT || 3000;
-        app.listen(port, () => {
-            console.log(`🚀 Server running at http://localhost:${port}/graphql`);
-        });
-    } catch (error) {
-        console.error("🚨 Error initializing the server", error);
-    }
+    const port = process.env.PORT || 3000;
+    app.listen(port, () => {
+      console.log(`🚀 Server running at http://localhost:${port}/graphql`);
+    });
+  } catch (error) {
+    console.error("🚨 Error initializing the server", error);
+  }
 }
 
 main();
-

@@ -1,5 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
-import { IsEmail, MinLength, Matches } from "class-validator";
+import { IsEmail, Matches, MinLength } from "class-validator";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+
+import { Post } from "./Post";
 
 @Entity()
 export class User {
@@ -14,4 +16,7 @@ export class User {
   @Column()
   @IsEmail({}, { message: "Email must be valid" })
   email!: string;
+
+  @OneToMany(() => Post, (post) => post.user, { nullable: true })
+  posts!: Post[];
 }
